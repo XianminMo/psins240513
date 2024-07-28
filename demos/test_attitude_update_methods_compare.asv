@@ -10,7 +10,7 @@ f = 2;  w = 2*pi*f;             % frequency
 T = 1;                          % simulation time
 [wm, qr] = conesimu(afa, f, ts, T);
 % [wm, qr] = highmansimu(randn(3,5), ts, T, 1);
-coef = wm2wtcoef(ts, nn);  % 根据nn个角增量采样可以构造一个N-1次的多项式角速度去拟合真实的角速度，迭代求解等效旋转矢量微分方程精确数值解，该项为转换矩阵系数
+coef = wm2wtcoef(ts, nn);  % 根据nn个角增量采样可以构造一个N-1次的多项式角速度去拟合真实的角速度，迭代求解等效旋转矢量微分方程
 len = length(wm); res = zeros(fix(len/nn), 18);    % res存储不同姿态更新方法结果，每一行代表一个时间步长，包含六种不同方法的误差（3轴*6）
 q1 = qr(1,:)'; q2 = q1; q3 = q1; q4 = q1; q5 = q1; q6 = q1; ki = 1;
 for k=1:nn:len-nn+1

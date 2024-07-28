@@ -117,7 +117,7 @@ global glv
             error('No SINS-pure type matched!');
         end
         %%
-        avp(ki,:) = [ins.avp; t]';    %% 将这一时段内计算得到的avp存入avp数组，以及时间序列
+        avp(ki,:) = [ins.avp; t]';    % 将这一时段内计算得到的avp存入avp数组，以及时间序列
         ki = timebar;
     end
 
