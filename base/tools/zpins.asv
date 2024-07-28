@@ -1,0 +1,18 @@
+function zpins(lat)
+% Z.
+%
+% Prototype: zpins(lat)
+% Inputs: xyz - xyz postion or pos=[lat,lon,hgt]
+%         L10 - span, default 10m
+%         isfig - figure flag
+% Output: ir - irregularity of [leveling,height,distance]
+%
+% See also  distance.
+
+% Copyright(c) 2009-2024, by Gongmin Yan, All rights reserved.
+% Northwestern Polytechnical University, Xi An, P.R.China
+% 05/03/2024
+global glv
+    if nargin<2; lat=60*glv.deg; end;
+    z = [glv.wie; sqrt(glv.g0/glv.Re); glv.wie*cos(lat)]/glv.wie;
+    zplane([], [z; -z]*1i);
