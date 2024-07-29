@@ -15,7 +15,7 @@ function ins = insupdate(ins, imu)
 % 22/03/2008, 12/01/2013, 18/03/2014, 09/09/2014
     nn = size(imu,1);    % 这里的imu实际上是外面的大循环中的一步，是指提取了nn个imu数据（角增量和速度增量），在外面是变量wvm，第一个维度即nn的大小
     nts = nn*ins.ts;  nts2 = nts/2;  ins.nts = nts;    % 计算姿态更新时间间隔nts，以及nts2为中间时间间隔 
-    [phim, dvbm] = cnscl(imu,0);    % coning & sculling compensation, 圆锥/划桨误差补偿
+    [phim, dvbm] = cnscl(imu,0);    % coning    & sculling compensation, 圆锥/划桨误差补偿
     phim = ins.Kg*phim-ins.eb*nts; dvbm = ins.Ka*dvbm-ins.db*nts;  % calibration
     %% earth & angular rate updating 
     vn01 = ins.vn+ins.an*nts2; pos01 = ins.pos+ins.Mpv*vn01*nts2;      % extrapolation at t1/2 速度，位置外推

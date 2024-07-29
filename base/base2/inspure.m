@@ -31,7 +31,7 @@ function avp = inspure(imu, avp0, href, isfig)
 % Northwestern Polytechnical University, Xi An, P.R.China
 % 12/01/2013, 04/09/2014
 global glv
-    [nn, ts, nts] = nnts(4, imu(2,end)-imu(1,end));    % 1/ts是imu更新频率，nn为子样数，1/nts为姿态更新频率，子样数越高代表姿态更新频率越低，因为需要累计nn个imu数据才能更新一次姿态！
+    [nn, ts, nts] = nnts(4, imu(2,end)-imu(1,end));    % 1/ts是imu采样频率，nn为子样数，1/nts为姿态更新频率，子样数越高代表姿态更新频率越低，因为需要累计nn个imu数据才能更新一次姿态！
     if length(avp0)<9, avp0=[avp0(1:3);zeros(3,1);avp0(4:end)]; end     % avp0=[att;pos] 补充vn
     ins = insinit(avp0, ts);  vn0 = avp0(4:6); pos0 = avp0(7:9);    % 初始化
     
