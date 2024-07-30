@@ -14,6 +14,7 @@ avp00 = avpadderr(trj.avp0, davp0);
 trj = bhsimu(trj, 1, 10, 3, trj.ts);
 %% pure inertial navigation & error plot
 avp = inspure(imu, avp00, trj.bh, 1);
+plot_trajectory_from_position(trj.avp, avp)
 % avp = inspure(imu, avp00, 'f', 1);
-avperr = avpcmpplot(trj.avp, avp);
+% avperr = avpcmpplot(trj.avp, avp);
 

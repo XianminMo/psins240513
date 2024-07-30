@@ -1,4 +1,0 @@
-glvs
-load flightimuavpr.mat;
-% insplot(avpr)    % 物体运动真值（采用INS/DGNSS组合平滑后，可作为参考真值）
-imuplot(imu)    % imu数据（三轴角增量和三轴）

@@ -13,6 +13,7 @@ function ins = insUpdateForOneLoop(ins, imu, f)
 %             4 for Bortz Runge-Kutta
 % Output: ins - SINS structure array after updating
 
+global glv
 nn = size(imu, 1);    % 这里的imu实际上是外面的大循环中的一步，是指提取了nn个imu数据（角增量和速度增量），在外面是变量wvm，第一个维度即nn的大小
 nts = nn*ins.ts;  nts2 = nts/2;  ins.nts = nts;    % 计算姿态更新时间间隔nts，以及nts2为中间时间间隔
 wm = imu(:, 1:3); vm = imu(:, 4:6);    % nn个角增量和速度增量
@@ -26,8 +27,8 @@ rotm = 1.0/2*cros(wmm, vmm);
 dvbm = (vmm+(rotm+scullm)*glv.csCompensate)';    % velocity increment after rotation & sculling compensation
 %% different attitude updating methods
 if f == 0
-    cm = glv.cs(n-1,1:n-1)*wm(1:n-1,:);
-    dphim = cros(cm,wm(n,:));
+    cm = glv.cs(nn-1,1:nn-1)*wm(1:nn-1,:);
+    dphim = cros(cm,wm(nn,:));
     phim = (wmm+dphim*glv.csCompensate)';    % 等效旋转矢量，表示姿态的更新，以rotation vector表示
     dq = rv2q(phim);    % 将rv转换成四元数表示
 elseif f == 1
@@ -37,11 +38,11 @@ elseif f == 2
     dq = qtaylor(wm'*coef, nts);
     phim = q2rv(dq);
 elseif f == 3
-    q1 = qrk4(q, wm, nts);
-    dq = qmul(qinv(q), q1);
-    phim = rv2q(dq);
+    q1 = qrk4(ins.qnb, wm, nts);
+    dq = qmul(qinv(ins.qnb), q1);
+    phim = q2rv(dq);
 elseif f == 4
-    phim = btzrk4(wmi, nts);
+    phim = btzrk4(wm, nts);
     dq = rv2q(phim);
 end
 %% earth & angular rate updating

@@ -38,7 +38,7 @@ global glv
     
     %% 
     if ~isempty(glv.dgn), ins.eth = attachdgn(ins.eth, glv.dgn); end
-    if nargin<3,  href = avp0(9);  end
+    if nargin<3,  href = avp0(9);  end    % nargin代表函数输入参数数量
     vp_fix = 'n';
     % vp_fix = 'b';  % unsing baro height
     if length(href)==1
