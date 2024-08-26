@@ -1,0 +1,14 @@
+load 20-04-48-474\Matlab\data.mat
+glvs
+pos = data00000000(:, 17:19); % [h, latitude, longitude] in m, °, °
+vel = data00000000(:, 20); % in km/h
+gyro = data00000000(:, 6:8); % in °/s
+acc = data00000000(:, 3:5); % in g
+
+pos = pos(:, [2, 3, 1]);
+position_vector = pos;
+pos(:, 1:2) = pos(:, 1:2) * glv.deg; % [latitude, longitude, h] in rad, rad, m
+
+vel = vel / 3.6; % in m/s
+
+gyro = 

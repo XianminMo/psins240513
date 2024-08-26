@@ -30,6 +30,6 @@ function [wm, qt, wt] = conesimu(afa, f, ts, T)
         wt = [ -2*omega*sin(afa/2)^2*ones(size(t)), ...  % angular rate
                -omega*sin(afa)*sin(omega*t), ...
                 omega*sin(afa)*cos(omega*t)];
-        % plot([wm(:,:)/ts- (wt(1:end-1,:)+wt(2:end,:))/2]);
+        plot(wm(:,:)/ts- (wt(1:end-1,:)+wt(2:end,:))/2);
     end
 

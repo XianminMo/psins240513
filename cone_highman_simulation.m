@@ -4,11 +4,11 @@ glvs
 afa = 40*glv.deg;              % half-apex angle
 f = 2;  w = 2*pi*f;             % frequency
 T = 10;                          % simulation time
-[wm, qr] = conesimu(afa, f, ts, T);    % 仿真圆锥运动, wm为角增量（imu数据），qr为姿态四元数（真值）
-% pcoef = [ -7.8125e-01     6.25e-01     2.8125e-01     2.5       0
-%               -3.1250e-02    -5.50e-01     4.5000e-01    -5.0e-01   0
-%                1.8750e-01    -6.75e-01     2.25          -2.55      0 ];
-% [wm, qr] = highmansimu(pcoef, ts, T, 0);
+% [wm, qr] = conesimu(afa, f, ts, T);    % 仿真圆锥运动, wm为角增量（imu数据），qr为姿态四元数（真值）
+pcoef = [ -7.8125e-01     6.25e-01     2.8125e-01     2.5       0
+              -3.1250e-02    -5.50e-01     4.5000e-01    -5.0e-01   0
+               1.8750e-01    -6.75e-01     2.25          -2.55      0 ];
+[wm, qr] = highmansimu(pcoef, ts, T, 1);
 coef = wm2wtcoef(ts, nn);  % 根据nn个角增量采样可以构造一个N-1次的多项式角速度去拟合真实的角速度，迭代求解等效旋转矢量微分方程精确数值解，该项为转换矩阵系数
 % 这里可以考虑加上初始的姿态误差
 len = length(wm);
@@ -21,7 +21,7 @@ q1 = zeros(fix(len/nn), 4); q2 = q1;
 for k=1:nn:len-nn+1
     k1 = k+nn-1;
 	wmi = wm(k:k1, :);	q0 = qr(k1+1,:)';
-	phim = cnscl(wmi, 2);  q1i = qmul(q1i,rv2q(phim)); % optimal method
+	phim = cnscl(wmi, 0);  q1i = qmul(q1i,rv2q(phim)); % optimal method
     q2i = qmul(q2i, rv2q(btzpicard(wmi'*coef, nts))); % accurate numerical solution with picard method
     % q3i = qmul(q3i, m2qua(dcmtaylor(wmi'*coef, nts))); % accurate numerical solution with taylor method
     % q4i = qmul(q4i, rv2q(btzrk4(wmi, nts)));  % Bortz Runge-Kutta
@@ -53,7 +53,7 @@ wm2_mock = angularIncrementProcess(wm2_mock, wm_true_aggregated, nn);
 % [RMSE4, AEE4] = computeError(wm4_mock, wm_true_aggregated);
 % [RMSE5, AEE5] = computeError(wm5_mock, wm_true_aggregated);
 
-algorithms = {'Algorithm 1', 'Algorithm 2'};
+algorithms = {'coning method', 'picard method'};
 RMSE = [RMSE1, RMSE2]; 
 AEE = [AEE1, AEE2]; 
 
@@ -80,7 +80,7 @@ ylim([ymin, ymax]);
 
 % 在柱状图上显示数值
 for i = 1:length(RMSE)
-    text(i, RMSE(i), sprintf('%.2e', RMSE(i)), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 8, 'Color', 'k');
+    text(i, RMSE(i), sprintf('%.5e', RMSE(i)), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 8, 'Color', 'k');
 end
 
 % 调整图形窗口大小和布局
@@ -105,7 +105,7 @@ ylim([ymin, ymax]);
 
 % 在柱状图上显示数值
 for i = 1:length(AEE)
-    text(i, AEE(i), sprintf('%.2e', AEE(i)), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 8, 'Color', 'k');
+    text(i, AEE(i), sprintf('%.5e', AEE(i)), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', 'FontSize', 8, 'Color', 'k');
 end
 
 % 调整图形窗口大小和布局

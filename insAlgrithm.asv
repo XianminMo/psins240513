@@ -10,61 +10,61 @@ glvs
 % avp0 = avpr(1,:)';    % avp initial value
 
 % % 以下是用组合导航设备采集的数据载入avpr
-load data_GPSIMU\data.mat
-ts = 0.1; % 时间间隔
-imu = IMU_data;
-imu(:, 1:3) = deg2rad(imu(:,1:3));
-
-% 将角速度和比力转换为增量
-imu(:, 1:3) = imu(:, 1:3) * ts; % 角增量，单位：rad
-imu(:, 4:6) = imu(:, 4:6) * glv.g0 * ts; % 速度增量，单位：m/s
-% imuplot(imu);
-
-att_true = attitude_vector(:, [2, 3, 1]);
-yaw = att_true(:, 3);
-for i = 1 : length(yaw)
-    if yaw(i) <= 180 && yaw(i) >= 0
-        yaw(i) = -yaw(i);
-    else
-        yaw(i) = 360 - yaw(i);
-    end
-end % yaw: 北偏东为正 0-360 -> 北偏西为正 -180-180
-att_true(:, 3) = yaw;
-att_true = deg2rad(att_true(:, :)); % [pitch, roll, yaw] in rad(pi)
-
-vel_true = velocity_vector(:, [1, 2, 3]); % [E, N, U] in m/s, 去掉最后一列时间戳
-
-pos_true = position_vector(:, [1, 2, 3, 4]); 
-pos_true(:, 1:2) = pos_true(:, 1:2) * glv.deg; % [latitude, longitude, altitude] in rad, rad, m/s
-
-avpr = [att_true, vel_true, pos_true];
-avp0 = avpr(1,:)';
-
+% load data_GPSIMU\data.mat
+% ts = 0.1; % 时间间隔
+% imu = IMU_data;
+% imu(:, 1:3) = deg2rad(imu(:,1:3));
+% 
+% % 将角速度和比力转换为增量
+% imu(:, 1:3) = imu(:, 1:3) * ts; % 角增量，单位：rad
+% imu(:, 4:6) = imu(:, 4:6) * glv.g0 * ts; % 速度增量，单位：m/s
+% % imuplot(imu);
+% 
+% att_true = attitude_vector(:, [2, 3, 1]);
+% yaw = att_true(:, 3);
+% for i = 1 : length(yaw)
+%     if yaw(i) <= 180 && yaw(i) >= 0
+%         yaw(i) = -yaw(i);
+%     else
+%         yaw(i) = 360 - yaw(i);
+%     end
+% end % yaw: 北偏东为正 0-360 -> 北偏西为正 -180-180
+% att_true(:, 3) = yaw;
+% att_true = deg2rad(att_true(:, :)); % [pitch, roll, yaw] in rad(pi)
+% 
+% vel_true = velocity_vector(:, [1, 2, 3]); % [E, N, U] in m/s, 去掉最后一列时间戳
+% 
+% pos_true = position_vector(:, [1, 2, 3, 4]); 
+% pos_true(:, 1:2) = pos_true(:, 1:2) * glv.deg; % [latitude, longitude, altitude] in rad, rad, m/s
+% 
+% avpr = [att_true, vel_true, pos_true];
+% avp0 = avpr(1,:)';
+% 
 % href = position_vector(:, end-1:end);
 
 % 以下是用小导航设备采集的数据载入avpr
 load ./data_smallIMU/data.mat
 ts = 0.1;
-imu(:, 1:6) = imu(:, 1:6) * ts; % 处理为增量形式
+imu()
 href = position_vector(:, end-1:end);
-% avp0 = [-0.00541052068118242, 0.0171042266695444, -2.56790292845926, -0.0170000000000000, 0.00600000000000000, -0.0180000000000000, 0.597958943767879, 1.89634169258822, 0, 0];
+
 %% geoplot
-figure;
-latitudes = position_vector(:,1);
-longitudes = position_vector(:,2);
-geoplot(latitudes, longitudes, '-o', 'LineWidth',2, 'MarkerSize', 2);
-hold on;
-% 标记起始点和终点
-geoplot(latitudes(1), longitudes(1), 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r'); % 起始点
-geoplot(latitudes(end), longitudes(end), 'gs', 'MarkerSize', 8, 'MarkerFaceColor', 'g'); % 终点
-% 添加图形标题
-title('Position Trajectory');
-% 添加标注文本
-text(longitudes(1), latitudes(1), ' Start', 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', 'Color', 'r', 'FontWeight', 'bold');
-text(longitudes(end), latitudes(end), ' End', 'VerticalAlignment', 'top', 'HorizontalAlignment', 'left', 'Color', 'g', 'FontWeight', 'bold');
-% 添加网格
-geobasemap('streets'); % 使用街道图层作为地图底图
-hold off;
+% figure;
+% latitudes = position_vector(:,1);
+% longitudes = position_vector(:,2);
+% geoplot(latitudes, longitudes, '-o', 'LineWidth',2, 'MarkerSize', 2);
+% hold on;
+% % 标记起始点和终点
+% geoplot(latitudes(1), longitudes(1), 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r'); % 起始点
+% geoplot(latitudes(end), longitudes(end), 'gs', 'MarkerSize', 8, 'MarkerFaceColor', 'g'); % 终点
+% % 添加图形标题
+% title('Position Trajectory');
+% % 添加标注文本
+% text(longitudes(1), latitudes(1), ' Start', 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', 'Color', 'r', 'FontWeight', 'bold');
+% text(longitudes(end), latitudes(end), ' End', 'VerticalAlignment', 'top', 'HorizontalAlignment', 'left', 'Color', 'g', 'FontWeight', 'bold');
+% % 添加网格
+% geobasemap('streets'); % 使用街道图层作为地图底图
+% hold off;
 % plotTrajectory(position_vector);
 %% error setting
 % eb = 0.1;

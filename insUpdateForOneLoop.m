@@ -45,6 +45,7 @@ elseif f == 4
     phim = btzrk4(wm, nts);
     dq = rv2q(phim);
 end
+% phim = q2rv(q);
 %% earth & angular rate updating
 vn01 = ins.vn+ins.an*nts2; pos01 = ins.pos+ins.Mpv*vn01*nts2;      % extrapolation at t1/2 速度，位置外推
 ins.eth = ethupdate(ins.eth, pos01, vn01);
